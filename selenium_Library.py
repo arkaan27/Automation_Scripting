@@ -10,6 +10,7 @@ Date: 07/01/2022
 import os
 import logging
 from selenium import webdriver
+import time
 
 # Basic Logging
 logging.basicConfig(
@@ -109,9 +110,11 @@ def open_link(driver, link):
     except AssertionError:
         logging.error("ERROR: The link must be a valid string")
 
+
 def company_search(driver, company_name):
     # NEED TO ADD TIMEFRAME Afterwards
     """
+    Searches company name on the website opened
 
     :param driver: driver of Selenium described through function start_driver (WebElement)
     :param company_name: Company name (str)
@@ -133,6 +136,43 @@ def company_search(driver, company_name):
         logging.info("SUCCESS: Typed the company name successfully")
         driver.find_element_by_xpath('//*[@id="2"]/div[5]/div[1]/a').click()
         logging.info("SUCCESS: Searched the companies documents")
-        driver.implicitly_wait(1)
+        time.sleep(1)
     except AssertionError:
         logging.error("ERROR: The company name must be a string")
+
+
+def download_documents(driver):
+
+    # Count of rows of documents clicked
+    count = 1
+    # Current window handle:
+    win_handle_before = driver.current_window_handle
+    try:
+        while count < 25:
+
+            # Finds the table rows and clicks
+            driver.find_element_by_xpath('//*[@id="sample_1"]/tbody/tr[%d]/td[2]/a' % count).click()
+            time.sleep(1)
+            logging.info("SUCCESS: Clicked the" + count + "row Link")
+
+            # get first child window
+            change_window = driver.window_handles
+            for w in change_window:
+                # switch focus to child window
+                if w != win_handle_before:
+                    driver.switch_to.window(w)
+            # find pdf url
+            pdf_url = driver.find_element_by_tag_name('iframe').get_attribute("src")
+            # load page with pdf
+            driver.get(pdf_url)
+            # download file
+            download = driver.find_element_by_xpath('//*[@id="download"]')
+            download.click()
+            logging.info("SUCCESS: Downloaded the document")
+            driver.close()
+            logging.info("SUCCESS: Closed the " + count + "row Link")
+            time.sleep(1)
+            driver.switch_to.window(win_handle_before)
+            count += 1
+    except:
+        pass
