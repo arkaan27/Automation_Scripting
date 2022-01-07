@@ -2,7 +2,7 @@ import unittest
 
 
 class MyTestCase(unittest.TestCase):
-    def test_something(self):
+    def test_create_directory(self):
         self.assertEqual(True, False)  # add assertion here
 
 
