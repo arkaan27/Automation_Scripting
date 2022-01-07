@@ -31,7 +31,9 @@ def create_directory(base_path, company_name):
 
     # Checking to see if base_path and company_name are strings
     try:
-        logging.info("base_path = {} \n company_name= {}".format(base_path, company_name))
+        logging.info(
+            "base_path = {} \n company_name= {}".format(
+                base_path, company_name))
         assert isinstance(base_path, str)
         assert isinstance(company_name, str)
         download_path = os.path.join(base_path, company_name)
@@ -60,21 +62,30 @@ def start_driver(download_path, chrome_driver_path):
     try:
 
         # Logs the info
-        logging.info("download_path = {} \n chrome_driver_path = {}".format(download_path, chrome_driver_path))
+        logging.info(
+            "download_path = {} \n chrome_driver_path = {}".format(
+                download_path, chrome_driver_path))
 
         # Checks the Arguments are strings
         assert isinstance(download_path, str)
         assert isinstance(chrome_driver_path, str)
 
+        # Changes the driver Download path
         chrome_options = webdriver.ChromeOptions()
         prefs = {'download.default_directory': download_path}
         chrome_options.add_experimental_option('prefs', prefs)
-        driver = webdriver.Chrome(chrome_driver_path, chrome_options=chrome_options)
+
+        # Starts th Driver
+        driver = webdriver.Chrome(
+            chrome_driver_path,
+            chrome_options=chrome_options)
+
+        # Logs the info
         logging.info('SUCCESS: Webdriver successfully started')
         return driver
     except AssertionError:
         logging.error('ERROR: download_path or chrome_driver_path must a str')
-
+        print('The driver did not start, please check log file')
 
 
 def open_link(driver, link):
@@ -85,9 +96,43 @@ def open_link(driver, link):
     :return:
     """
     # Opens the link
-    driver.get(link)
-    driver.maximize_window()
+    try:
+        # Storing input variable in results file
+        logging.info("\n Link = {}".format(link))
 
-# def company_search(company_name, time_frame):
-#
-#
+        # Making sure that link is a string and driver is not none
+        assert isinstance(link, str)
+        assert driver is not None
+        driver.get(link)
+        driver.maximize_window()
+        logging.info("SUCCESS: Opened the Link on the driver")
+    except AssertionError:
+        logging.error("ERROR: The link must be a valid string")
+
+def company_search(driver, company_name):
+    # NEED TO ADD TIMEFRAME Afterwards
+    """
+
+    :param driver: driver of Selenium described through function start_driver (WebElement)
+    :param company_name: Company name (str)
+    :return:
+    """
+    try:
+        # Logging
+        logging.info("company name = {} \n ".format(company_name))
+
+        # Making sure the company name is a str
+        assert isinstance(company_name, str)
+
+        # Searches the Company Name
+        driver.find_element_by_xpath('//*[@id="ssid"]').click()
+        driver.find_element_by_xpath('//*[@id="ssid"]/option[1]').click()
+        logging.info("SUCCESS: Changed to All-Sub-Section")
+        driver.find_element_by_xpath('//*[@id="search"]').click()
+        driver.find_element_by_xpath('//*[@id="search"]').send_keys(company_name)  # Company name
+        logging.info("SUCCESS: Typed the company name successfully")
+        driver.find_element_by_xpath('//*[@id="2"]/div[5]/div[1]/a').click()
+        logging.info("SUCCESS: Searched the companies documents")
+        driver.implicitly_wait(1)
+    except AssertionError:
+        logging.error("ERROR: The company name must be a string")

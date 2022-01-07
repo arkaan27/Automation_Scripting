@@ -1,6 +1,14 @@
 root - INFO - base_path = D:// 
- company_name= Novavax
+ company_name= InfoSys
 root - ERROR - ERROR: This directory already exists
-root - INFO - download_path = D://Novavax 
- chrome_driver_path = 1
-root - ERROR - ERROR: download_path or chrome_driver_path must a str
+root - INFO - download_path = D://InfoSys 
+ chrome_driver_path = C://Users/arkaa/Desktop/chromedriver.exe
+root - INFO - SUCCESS: Webdriver successfully started
+root - INFO - 
+ Link = https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=3&ssid=14&smid=8
+root - INFO - SUCCESS: Opened the Link on the driver
+root - INFO - company name = InfoSys 
+ 
+root - INFO - SUCCESS: Changed to All-Sub-Section
+root - INFO - SUCCESS: Typed the company name successfully
+root - INFO - SUCCESS: Searched the companies documents
