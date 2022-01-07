@@ -9,9 +9,9 @@ Date: 07/01/2022
 # Imports
 import os
 import logging
-import selenium
+from selenium import webdriver
 
-
+# Basic Logging
 logging.basicConfig(
     filename='./results.log',
     level=logging.INFO,
@@ -35,22 +35,20 @@ def create_directory(base_path, company_name):
         assert isinstance(base_path, str)
         assert isinstance(company_name, str)
         download_path = os.path.join(base_path, company_name)
-
         # Create Directory if does not exist
         if not os.path.exists(download_path):
             os.mkdir(download_path)
             logging.info("SUCCESS: Created the directory")
             print("Directory ", download_path, " Created ")
-            return download_path
         else:
             logging.error("ERROR: This directory already exists")
             print("Directory ", download_path, " already exists")
+        return download_path
     except (TypeError, AssertionError):
         logging.error("ERROR: The base path/ company name is not a string")
 
 
-
-def start_driver(download_path,chrome_driver_path):
+def start_driver(download_path, chrome_driver_path):
     """
     Starts the driver
 
@@ -58,15 +56,38 @@ def start_driver(download_path,chrome_driver_path):
     :param chrome_driver_path: chrome driver path (str)
     :return: driver
     """
-    
+    # Starts the Driver
+    try:
+
+        # Logs the info
+        logging.info("download_path = {} \n chrome_driver_path = {}".format(download_path, chrome_driver_path))
+
+        # Checks the Arguments are strings
+        assert isinstance(download_path, str)
+        assert isinstance(chrome_driver_path, str)
+
+        chrome_options = webdriver.ChromeOptions()
+        prefs = {'download.default_directory': download_path}
+        chrome_options.add_experimental_option('prefs', prefs)
+        driver = webdriver.Chrome(chrome_driver_path, chrome_options=chrome_options)
+        logging.info('SUCCESS: Webdriver successfully started')
+        return driver
+    except AssertionError:
+        logging.error('ERROR: download_path or chrome_driver_path must a str')
 
 
 
+def open_link(driver, link):
+    """
 
-# def open_link(driver, link):
-#
-#
-#
+    :param driver: driver of Selenium described through function start_driver (WebElement)
+    :param link: Website to be automated (str)
+    :return:
+    """
+    # Opens the link
+    driver.get(link)
+    driver.maximize_window()
+
 # def company_search(company_name, time_frame):
 #
 #

@@ -1,3 +1,6 @@
 root - INFO - base_path = D:// 
  company_name= Novavax
 root - ERROR - ERROR: This directory already exists
+root - INFO - download_path = D://Novavax 
+ chrome_driver_path = 1
+root - ERROR - ERROR: download_path or chrome_driver_path must a str
