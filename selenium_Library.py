@@ -1,6 +1,13 @@
 """
 This is Selenium Library used to automate Downloads from link
 
+Functions:
+1. Create Directory
+2. Start Driver
+3. Open Link
+4. Company Search
+5. Download Documents
+
 Author: Arkaan Quanunga,
 
 Date: 07/01/2022
